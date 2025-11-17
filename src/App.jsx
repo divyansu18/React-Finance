@@ -1,12 +1,34 @@
 import React, { useState } from "react";
+// local storage helpers (keep persistence inside App.jsx as requested)
+const STORAGE_KEY = 'finance_app_v1';
+function loadLocal() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return null;
+    return JSON.parse(raw);
+  } catch (e) {
+    console.error('Failed to parse localStorage data', e);
+    return null;
+  }
+}
+
+function saveLocal(data) {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    return true;
+  } catch (e) {
+    console.error('Failed to save data', e);
+    return false;
+  }
+}
 import AddExpense from "./components/AddExpense";
 import ExpenseList from "./components/ExpenseList";
 import GroupManager from "./components/GroupManager";
 import MonthlySummary from "./components/MonthlySummary";
 export default function App() {
-  // Load from localStorage on first render, never seed from data.json
+  // Load from localStorage on first render
   const [data, setData] = useState(() => {
-    const stored = localStorage.getItem('finance_app_v1'); 
+    const stored = localStorage.getItem('finance_app_v1');
     if (stored) {
       try {
         return JSON.parse(stored);
@@ -17,32 +39,51 @@ export default function App() {
     return { expenses: [], groups: [], categories: [], ui: { groupManagerView: 'groups' } };
   });
 
+  
+
   const handleAddExpense = (exp) => {
-    setData((prev) => ({ ...prev, expenses: [exp, ...prev.expenses] }));
+    const next = { ...data, expenses: [exp, ...(data.expenses || [])] };
+    setData(next);
+    saveLocal(next);
   };
 
   const handleAddGroup = (group) => {
-    setData((prev) => ({ ...prev, groups: [group, ...prev.groups] }));
+    const next = { ...data, groups: [group, ...(data.groups || [])] };
+    setData(next);
+    saveLocal(next);
   };
 
   const handleRemoveGroup = (groupId) => {
-    setData((prev) => ({ ...prev, groups: prev.groups.filter(g => g.id !== groupId) }));
+    const next = { ...data, groups: (data.groups || []).filter(g => g.id !== groupId) };
+    setData(next);
+    saveLocal(next);
   };
 
   const handleAddCategory = (category) => {
-    setData(prev => ({ ...prev, categories: [category, ...prev.categories] }));
+    const next = { ...data, categories: [category, ...(data.categories || [])] };
+    setData(next);
+    saveLocal(next);
+  };
+
+  const handleToggleCategory = (catId) => {
+    const next = { ...data, categories: (data.categories || []).map(c => c.id === catId ? { ...c, active: !c.active } : c) };
+    setData(next);
+    saveLocal(next);
   };
 
   const handleRemoveCategory = (catId) => {
-    setData(prev => ({ ...prev, categories: prev.categories.filter(c => c.id !== catId) }));
+    const next = { ...data, categories: (data.categories || []).filter(c => c.id !== catId) };
+    setData(next);
+    saveLocal(next);
   };
 
   const setGroupManagerView = (view) => {
-    setData(prev => ({ ...prev, ui: { ...(prev.ui || {}), groupManagerView: view } }));
+    const next = { ...data, ui: { ...(data.ui || {}), groupManagerView: view } };
+    setData(next);
+    saveLocal(next);
   };
   return (
     <div className="container">
-      {/* TOP BAR */}
       <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 20 }}>
         <h2>Personal Finance Tracker</h2>
       </div>
