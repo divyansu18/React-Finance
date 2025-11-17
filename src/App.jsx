@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-// local storage helpers (keep persistence inside App.jsx as requested)
+// Local storage helpers
 const STORAGE_KEY = 'finance_app_v1';
 function loadLocal() {
   try {
@@ -26,7 +26,6 @@ import ExpenseList from "./components/ExpenseList";
 import GroupManager from "./components/GroupManager";
 import MonthlySummary from "./components/MonthlySummary";
 export default function App() {
-  // Load from localStorage on first render
   const [data, setData] = useState(() => {
     const stored = localStorage.getItem('finance_app_v1');
     if (stored) {
@@ -38,8 +37,6 @@ export default function App() {
     }
     return { expenses: [], groups: [], categories: [], ui: { groupManagerView: 'groups' } };
   });
-
-  
 
   const handleAddExpense = (exp) => {
     const next = { ...data, expenses: [exp, ...(data.expenses || [])] };
@@ -88,7 +85,6 @@ export default function App() {
         <h2>Personal Finance Tracker</h2>
       </div>
 
-      {/* TOP GRID */}
       <div className="grid-2">
         <div className="card">
           <div className="section-title">Add Expense</div>
@@ -110,13 +106,11 @@ export default function App() {
         </div>
       </div>
 
-      {/* Monthly Summary */}
       <div className="card">
         <div className="section-title">Monthly Summary</div>
         <MonthlySummary expenses={data.expenses} groups={data.groups} />
       </div>
 
-      {/* Expense List */}
       <div className="card">
         <div className="section-title">All Expenses</div>
         <ExpenseList expenses={data.expenses} />

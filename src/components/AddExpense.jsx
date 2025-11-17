@@ -2,14 +2,12 @@
 import React, { useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
-
 export default function AddExpense({ groups = [], categories = [], onAdd }) {
   const [date, setDate] = useState(() => new Date().toISOString().slice(0,10));
   const [amount, setAmount] = useState('');
   const [description, setDescription] = useState('');
   const defaultCat = (categories.find(c => c.active) || {}).name || 'Misc';
   const [category, setCategory] = useState(defaultCat);
-  const [setCustomCategory] = useState('');
   const [groupId, setGroupId] = useState('');
   const [paidBy, setPaidBy] = useState('common');
 
@@ -26,8 +24,6 @@ export default function AddExpense({ groups = [], categories = [], onAdd }) {
     const members = group.members;
     const per = Math.round((amt / members.length) * 100) / 100;
     members.forEach(m => split[m] = per);
-    
-    // Adjust rounding error to first member
     const total = Object.values(split).reduce((s,v)=>s+v,0);
     const diff = Math.round((amt - total) * 100) / 100;
     if (Math.abs(diff) > 0) split[members[0]] += diff;
@@ -46,7 +42,6 @@ export default function AddExpense({ groups = [], categories = [], onAdd }) {
       split
     };
     onAdd(expense);
-    // reset
     setAmount(''); setDescription(''); setCategory(defaultCat); setPaidBy('common'); setGroupId('');
   };
 
@@ -68,11 +63,10 @@ export default function AddExpense({ groups = [], categories = [], onAdd }) {
         </label>
         <label>
           Category
-          
-            <select value={category} onChange={e=>setCategory(e.target.value)}>
-              <option value="">-- select --</option>
-              {categories.map(c => <option key={c.id} value={c.name}>{c.name}</option>)}
-            </select>
+          <select value={category} onChange={e=>setCategory(e.target.value)}>
+            <option value="">-- select --</option>
+            {categories.map(c => <option key={c.id} value={c.name}>{c.name}</option>)}
+          </select>
         </label>
         <label>
           Select Group

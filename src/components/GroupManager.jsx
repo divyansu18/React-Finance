@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
-export default function GroupManager({ groups = [], categories = [], activeView = 'groups', onChangeView, onAddGroup, onRemoveGroup, onReplaceGroups, onAddCategory, onRemoveCategory }) {
+export default function GroupManager({ groups = [], categories = [], activeView = 'groups', onChangeView, onAddGroup, onRemoveGroup, onAddCategory, onRemoveCategory }) {
   const [name, setName] = useState('');
   const [membersText, setMembersText] = useState('');
   const [catName, setCatName] = useState('');
@@ -19,12 +19,6 @@ export default function GroupManager({ groups = [], categories = [], activeView 
   const handleRemove = (id) => {
     if (typeof onRemoveGroup === 'function') {
       onRemoveGroup(id);
-      return;
-    }
-
-    // fallback: if onReplaceGroups provided, call with filtered list
-    if (typeof onReplaceGroups === 'function') {
-      onReplaceGroups(groups.filter(g => g.id !== id));
     }
   };
 
