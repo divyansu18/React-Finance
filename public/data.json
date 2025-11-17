@@ -1,0 +1,21 @@
+{
+  "expenses": [
+    {
+      "id": "R_1",
+      "date": "2025-11-14",
+      "amount": 55.5,
+      "description": "Dinner at Thai Place",
+      "category": "Food",
+      "type": "personal",
+      "paidBy": "Me",
+      "split": {"Me": 55.5}
+    }
+  ],
+  "groups": [
+    {
+      "id": "g1",
+      "name": "Roommates",
+      "members": ["Alice", "Bob", "Me"]
+    }
+  ]
+}
