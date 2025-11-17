@@ -81,7 +81,7 @@ export default function App() {
   };
   return (
     <div className="container">
-      <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 20 }}>
+      <div style={{ textAlign: "center", marginBottom: 20 }}>
         <h2>Personal Finance Tracker</h2>
       </div>
 
