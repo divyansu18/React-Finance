@@ -13,7 +13,7 @@ export default function ExpenseList({ expenses = [] }) {
         </thead>
         <tbody>
           {expenses.map(exp => (
-            <tr key={exp.id}>
+            <tr key={exp.id} style={{ borderTop: '1px solid #ddd' }}>
               <td>{exp.date}</td>
               <td>{exp.description}</td>
               <td>{exp.category}</td>
