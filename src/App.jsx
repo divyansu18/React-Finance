@@ -6,7 +6,7 @@ import MonthlySummary from "./components/MonthlySummary";
 export default function App() {
   // Load from localStorage on first render, never seed from data.json
   const [data, setData] = useState(() => {
-    const stored = localStorage.getItem('finance_app_v1');
+    const stored = localStorage.getItem('finance_app_v1'); 
     if (stored) {
       try {
         return JSON.parse(stored);
