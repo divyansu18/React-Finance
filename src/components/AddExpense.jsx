@@ -2,51 +2,37 @@
 import React, { useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
+
 export default function AddExpense({ groups = [], categories = [], onAdd }) {
   const [date, setDate] = useState(() => new Date().toISOString().slice(0,10));
   const [amount, setAmount] = useState('');
   const [description, setDescription] = useState('');
   const defaultCat = (categories.find(c => c.active) || {}).name || 'Misc';
   const [category, setCategory] = useState(defaultCat);
-  const [customCategory, setCustomCategory] = useState('');
-  const [type, setType] = useState('personal');
+  const [setCustomCategory] = useState('');
   const [groupId, setGroupId] = useState('');
-  const [customSplit, setCustomSplit] = useState({});
+  const [paidBy, setPaidBy] = useState('common');
 
   const handleSubmit = (e) => {
     e.preventDefault();
     const amt = parseFloat(amount);
     if (!amt || !description) { alert('Enter amount and description'); return; }
 
+    const group = groups.find(g => g.id === groupId);
+    if (!group) { alert('Select a group'); return; }
+    
+    // Equal split among group members
     let split = {};
-    if (type === 'personal') {
-      split['Me'] = amt;
-    } else {
-      const group = groups.find(g => g.id === groupId);
-      if (!group) { alert('Select a group'); return; }
-      // equal split if no custom amounts
-      const members = group.members;
-      const sumCustom = Object.values(customSplit).reduce((s, v) => s + (parseFloat(v) || 0), 0);
-      if (sumCustom > 0) {
-        // use custom split but ensure it equals total
-        if (Math.abs(sumCustom - amt) > 0.005) {
-          alert('Custom split does not add up to total');
-          return;
-        }
-        members.forEach(m => {
-          split[m] = parseFloat(customSplit[m]) || 0;
-        });
-      } else {
-        const per = Math.round((amt / members.length) * 100) / 100;
-        members.forEach(m => split[m] = per);
-        // adjust tiny rounding error to first member
-        const total = Object.values(split).reduce((s,v)=>s+v,0);
-        const diff = Math.round((amt - total) * 100) / 100;
-        if (Math.abs(diff) > 0) split[members[0]] += diff;
-      }
-    }
+    const members = group.members;
+    const per = Math.round((amt / members.length) * 100) / 100;
+    members.forEach(m => split[m] = per);
+    
+    // Adjust rounding error to first member
+    const total = Object.values(split).reduce((s,v)=>s+v,0);
+    const diff = Math.round((amt - total) * 100) / 100;
+    if (Math.abs(diff) > 0) split[members[0]] += diff;
 
-    const finalCategory = category === '__other' ? (customCategory || 'Misc') : (category || 'Misc');
+    const finalCategory = category || 'Misc';
 
     const expense = {
       id: 'R_' + uuidv4(),
@@ -54,14 +40,14 @@ export default function AddExpense({ groups = [], categories = [], onAdd }) {
       amount: amt,
       description,
       category: finalCategory,
-      type,
-      paidBy: '',
-      groupId: type === 'group' ? groupId : undefined,
+      type: 'group',
+      paidBy,
+      groupId,
       split
     };
     onAdd(expense);
     // reset
-    setAmount(''); setDescription(''); setCustomSplit({}); setCategory(defaultCat); setCustomCategory('');
+    setAmount(''); setDescription(''); setCategory(defaultCat); setPaidBy('common'); setGroupId('');
   };
 
   return (
@@ -86,48 +72,24 @@ export default function AddExpense({ groups = [], categories = [], onAdd }) {
             <select value={category} onChange={e=>setCategory(e.target.value)}>
               <option value="">-- select --</option>
               {categories.map(c => <option key={c.id} value={c.name}>{c.name}</option>)}
-              {/* <option value="__other">Other</option> */}
             </select>
-            {/* {category === '__other' && (
-              <input placeholder="Custom category" value={customCategory} onChange={e=>setCustomCategory(e.target.value)} />
-            )} */}
-            
         </label>
         <label>
-          Type
-          <select value={type} onChange={e=>setType(e.target.value)}>
-            <option value="personal">Personal</option>
-            <option value="group">Group</option>
+          Select Group
+          <select value={groupId} onChange={e=>setGroupId(e.target.value)}>
+            <option value="">-- select --</option>
+            {groups.map(g=> <option key={g.id} value={g.id}>{g.name}</option>)}
           </select>
         </label>
-
-        {type === 'group' && (
-          <>
-            <label>
-              Select Group
-              <select value={groupId} onChange={e=>setGroupId(e.target.value)}>
-                <option value="">-- select --</option>
-                {groups.map(g=> <option key={g.id} value={g.id}>{g.name}</option>)}
-              </select>
-            </label>
-
-            <div style={{ gridColumn: '1 / -1' }}>
-              <h4>Custom Split (optional)</h4>
-              {groups.find(g=>g.id===groupId)?.members?.map(m => (
-                <div key={m}>
-                  <label>{m} owes:
-                    <input
-                      type="number"
-                      step="0.01"
-                      value={customSplit[m] || ''}
-                      onChange={e => setCustomSplit(prev => ({ ...prev, [m]: e.target.value }))}
-                    />
-                  </label>
-                </div>
-              ))}
-            </div>
-          </>
-        )}
+        <label>
+          Paid By
+          <select value={paidBy} onChange={e=>setPaidBy(e.target.value)}>
+            <option value="common">Common</option>
+            {groups.find(g=>g.id===groupId)?.members?.map(m => (
+              <option key={m} value={m}>{m}</option>
+            ))}
+          </select>
+        </label>
       </div>
 
       <div style={{ marginTop: 8 }}>

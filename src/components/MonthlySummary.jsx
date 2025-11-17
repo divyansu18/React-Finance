@@ -21,7 +21,7 @@ export default function MonthlySummary({ expenses = [] }) {
     const bal = {};
     filtered.forEach(e => {
       if (e.type !== 'group') return;
-      const payer = e.paidBy || 'Me';
+      const payer = e.paidBy || 'common';
       const split = e.split || {};
       Object.entries(split).forEach(([user, owe]) => {
         // user owes "owe"; payer gets owed from others

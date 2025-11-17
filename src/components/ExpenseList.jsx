@@ -8,7 +8,7 @@ export default function ExpenseList({ expenses = [] }) {
       <table style={{ width: '100%', borderCollapse: 'collapse' }}>
         <thead>
           <tr>
-            <th>Date</th><th>Description</th><th>Category</th><th>Amount</th><th>Split</th>
+            <th>Date</th><th>Description</th><th>Category</th><th>Amount</th><th>Paid By</th><th>Split</th>
           </tr>
         </thead>
         <tbody>
@@ -18,12 +18,11 @@ export default function ExpenseList({ expenses = [] }) {
               <td>{exp.description}</td>
               <td>{exp.category}</td>
               <td>{exp.amount.toFixed(2)}</td>
+              <td>{exp.paidBy || 'Common'}</td>
               <td>
-                {exp.type === 'group' ? (
-                  <div>
-                    {Object.entries(exp.split || {}).map(([k,v]) => <div key={k}>{k}: {v}</div>)}
-                  </div>
-                ) : '—'}
+                <div style={{ fontSize: '0.85em' }}>
+                  {Object.entries(exp.split || {}).map(([k,v]) => <div key={k}>{k}: ${v.toFixed(2)}</div>)}
+                </div>
               </td>
             </tr>
           ))}
