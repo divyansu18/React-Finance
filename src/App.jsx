@@ -1,4 +1,9 @@
 import React, { useState } from "react";
+import AddExpense from "./components/AddExpense";
+import ExpenseList from "./components/ExpenseList";
+import GroupManager from "./components/GroupManager";
+import MonthlySummary from "./components/MonthlySummary";
+
 // Local storage helpers
 const STORAGE_KEY = 'finance_app_v1';
 function loadLocal() {
@@ -21,10 +26,7 @@ function saveLocal(data) {
     return false;
   }
 }
-import AddExpense from "./components/AddExpense";
-import ExpenseList from "./components/ExpenseList";
-import GroupManager from "./components/GroupManager";
-import MonthlySummary from "./components/MonthlySummary";
+
 export default function App() {
   const [data, setData] = useState(() => {
     const stored = localStorage.getItem('finance_app_v1');
