@@ -26,7 +26,7 @@ export default function GroupManager({ groups = [], categories = [], activeView 
     e.preventDefault();
     const name = (catName || '').trim();
     if (!name) { alert('Enter category name'); return; }
-    const category = { id: 'cat_' + uuidv4(), name, active: true };
+    const category = { id: 'cat_' + uuidv4(), name };
     if (typeof onAddCategory === 'function') {
       onAddCategory(category);
     }
@@ -39,8 +39,7 @@ export default function GroupManager({ groups = [], categories = [], activeView 
 
   return (
     <div style={{ border: '1px solid #eee', padding: 12, marginBottom: 12 }} >
-         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-        <h3>{activeView === 'groups' ? 'Groups' : 'Categories'}</h3>
+         <div>
         <div>
           <button onClick={() => onChangeView && onChangeView('groups')} style={{ marginRight: 8, background: activeView === 'groups' ? '#007bff' : '#eee', color: activeView === 'groups' ? '#fff' : '#000', border: 'none', padding: '6px 10px', borderRadius: 4, cursor: 'pointer' }}>Groups</button>
           <button onClick={() => onChangeView && onChangeView('categories')} style={{ background: activeView === 'categories' ? '#007bff' : '#eee', color: activeView === 'categories' ? '#fff' : '#000', border: 'none', padding: '6px 10px', borderRadius: 4, cursor: 'pointer' }}>Categories</button>
@@ -49,7 +48,7 @@ export default function GroupManager({ groups = [], categories = [], activeView 
       {activeView === 'groups' ? (
       <>
      
-      <form onSubmit={createGroup}>
+      <form onSubmit={createGroup}  style={{ marginTop: 16 }}>
         <div>
           <input placeholder="Group name" value={name} onChange={e=>setName(e.target.value)} />
         </div>

@@ -6,16 +6,6 @@ import MonthlySummary from "./components/MonthlySummary";
 
 // Local storage helpers
 const STORAGE_KEY = 'finance_app_v1';
-function loadLocal() {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if (!raw) return null;
-    return JSON.parse(raw);
-  } catch (e) {
-    console.error('Failed to parse localStorage data', e);
-    return null;
-  }
-}
 
 function saveLocal(data) {
   try {
@@ -37,7 +27,7 @@ export default function App() {
         console.error('Failed to parse stored data', e);
       }
     }
-    return { expenses: [], groups: [], categories: [], ui: { groupManagerView: 'groups' } };
+    return { expenses: [], groups: [], categories: [] };
   });
 
   const handleAddExpense = (exp) => {
@@ -60,12 +50,6 @@ export default function App() {
 
   const handleAddCategory = (category) => {
     const next = { ...data, categories: [category, ...(data.categories || [])] };
-    setData(next);
-    saveLocal(next);
-  };
-
-  const handleToggleCategory = (catId) => {
-    const next = { ...data, categories: (data.categories || []).map(c => c.id === catId ? { ...c, active: !c.active } : c) };
     setData(next);
     saveLocal(next);
   };

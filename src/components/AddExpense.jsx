@@ -6,8 +6,7 @@ export default function AddExpense({ groups = [], categories = [], onAdd }) {
   const [date, setDate] = useState(() => new Date().toISOString().slice(0,10));
   const [amount, setAmount] = useState('');
   const [description, setDescription] = useState('');
-  const defaultCat = (categories.find(c => c.active) || {}).name || 'Misc';
-  const [category, setCategory] = useState(defaultCat);
+  const [category, setCategory] = useState(categories);
   const [groupId, setGroupId] = useState('');
   const [paidBy, setPaidBy] = useState('common');
 
@@ -42,7 +41,8 @@ export default function AddExpense({ groups = [], categories = [], onAdd }) {
       split
     };
     onAdd(expense);
-    setAmount(''); setDescription(''); setCategory(defaultCat); setPaidBy('common'); setGroupId('');
+    setAmount(''); setDescription(''); setCategory(categories); setPaidBy('common'); setGroupId('');
+    alert('Expense added successfully');
   };
 
   return (
