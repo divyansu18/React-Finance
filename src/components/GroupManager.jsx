@@ -59,9 +59,9 @@ export default function GroupManager({ groups = [], categories = [], activeView 
       </form>
 
       
-        <div style={{ marginTop: 8 }}>
+        <div style={{ marginTop: 20 }}>
           <strong>Existing groups:</strong>
-          <ul>
+          <ul style={{ maxHeight: '26vh', overflow: 'auto', paddingLeft: 15  }}>
             {groups.map(g => (
               <li key={g.id} style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '10px 0px' }}>
                 <span style={{ flex: 1 }}>{g.name} ({g.members.join(', ')})</span>
@@ -80,9 +80,9 @@ export default function GroupManager({ groups = [], categories = [], activeView 
           <button type="submit">Add Category</button>
         </form>
 
-        <div style={{ marginTop: 8 }}>
+        <div style={{ marginTop: 20 }}>
           <strong>Existing categories:</strong>
-          <ul>
+          <ul style={{ maxHeight: '26vh', overflow: 'auto', paddingLeft: 15 }}>
             {categories.map(c => (
               <li key={c.id} style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '6px 0' }}>
                 <span style={{ flex: 1 }}>{c.name}</span>
