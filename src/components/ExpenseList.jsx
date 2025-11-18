@@ -48,7 +48,7 @@ export default function ExpenseList({ expenses = [] }) {
         </thead>
         <tbody>
           {expenses.map(exp => (
-            <tr key={exp.id} style={{ borderTop: '1px solid #ddd' }}>
+            <tr key={exp.id} style={{ borderTop: '1px solid #ddd', textAlign: 'center' }}>
               <td>{exp.date}</td>
               <td>{exp.description}</td>
               <td>{exp.category}</td>
@@ -57,7 +57,7 @@ export default function ExpenseList({ expenses = [] }) {
               <td>
                 <div style={{ fontSize: '0.85em' }}>
                   {Object.entries(exp.split || {}).map(([k, v]) => (
-                    <div key={k}>{k}: ${v.toFixed(2)}</div>
+                    <div key={k}>{k}: {v.toFixed(2)}</div>
                   ))}
                 </div>
               </td>

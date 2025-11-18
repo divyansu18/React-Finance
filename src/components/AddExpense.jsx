@@ -55,7 +55,7 @@ export default function AddExpense({ groups = [], categories = [], onAdd }) {
         </label>
         <label>
           Amount
-          <input type="number" step="0.01" value={amount} onChange={e=>setAmount(e.target.value)} />
+          <input type="number" value={amount} onChange={e=>setAmount(e.target.value)} />
         </label>
         <label style={{ gridColumn: 'span 2' }}>
           Description
